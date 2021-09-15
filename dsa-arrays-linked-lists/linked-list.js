@@ -18,22 +18,34 @@ class LinkedList {
     for (let val of vals) this.push(val);
   }
 
+  /** _get(idx): retrieve node at idx. */
+
+  _get(idx) {
+    let cur = this.head;
+    let count = 0;
+
+    while (cur !== null && count != idx) {
+      count += 1;
+      cur = cur.next;
+    }
+
+    return cur;
+  }
+
   /** push(val): add new value to end of list. */
 
   push(val) {
     let newNode = new Node(val);
 
-    if(this.head === null) {
+    if (!this.head) {
       this.head = newNode;
       this.tail = this.head;
-    }
-    if(this.tail !== null) {
+    } else {
       this.tail.next = newNode;
       this.tail = newNode;
     }
-  
-    this.length += 1;
 
+    this.length += 1;
   }
 
   /** unshift(val): add new value to start of list. */
@@ -41,13 +53,15 @@ class LinkedList {
   unshift(val) {
     let newNode = new Node(val);
 
-    if(this.head === null) {
+    if (this.head === null) {
       this.head = newNode;
-      this.tail = newNode;
     } else {
       newNode.next = this.head;
       this.head = newNode;
-    } 
+    }
+
+    if (this.length === 0) this.tail = this.head;
+
     this.length += 1;
   }
 
@@ -66,35 +80,22 @@ class LinkedList {
   /** getAt(idx): get val at idx. */
 
   getAt(idx) {
-    let currentNode = this.head;
-    let count = 0;
-
-    if(idx >= this.length || idx < 0) {
-      throw new Error('Invalid index.')
+    if (idx >= this.length || idx < 0) {
+      throw new Error("Invalid index.");
     }
 
-    while(currentNode !== null && count !== idx) {
-      count += 1;
-      currentNode = currentNode.next;
-    }
-    return currentNode.val;
+    return this._get(idx).val;
   }
 
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
-    let currentNode = this.head;
-    let count = 0;
-
-    if(idx >= this.length || idx < 0) {
-      throw new Error('Invalid index.')
+    if (idx >= this.length || idx < 0) {
+      throw new Error("Invalid index.");
     }
 
-    while(currentNode !== null && count !== idx) {
-      count += 1;
-      currentNode = currentNode.next;
-    }
-    currentNode.val = val;
+    let cur = this._get(idx);
+    cur.val = val;
   }
 
   /** insertAt(idx, val): add node w/val before idx. */
@@ -154,18 +155,18 @@ class LinkedList {
     return val;
   }
 
-  /** average(): return an average of all values in the list */
-
   average() {
-    if(this.length === 0) return 0;
+    if (this.length === 0) return 0;
 
-    let currentNode = this.head;
-    let sum = 0;
-    while(currentNode) {
-      sum += currentNode.val;
-      currentNode = currentNode.next;
+    let total = 0;
+    let current = this.head;
+
+    while (current) {
+      total += current.val;
+      current = current.next;
     }
-    return sum / this.length;
+
+    return total / this.length;
   }
 }
 
